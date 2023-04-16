@@ -58,6 +58,11 @@ contract VendingMachine is ReentrancyGuard {
         uint256 USDCValue
     );
 
+    modifier onlyOwner(){
+        require(msg.sender == owner, "You do not have an access");
+        _;
+    }
+
     function getLatestUSDCPrice() public view returns (int256) {
     (
         ,
@@ -142,11 +147,10 @@ contract VendingMachine is ReentrancyGuard {
     }
 
     function purchaseForMATIC() public payable returns (uint256 boughtAmount) {
-        uint256 _USDCAmount = uint256(uint256(getLatestMATICPrice() / getLatestUSDCPrice()) * msg.value) / 10**12;
-        uint256 _TokenAmount = convertFromStable(_USDCAmount);
+        uint256 rate =  uint256(uint256(getLatestUSDCPrice() * 100 / getLatestMATICPrice()) * ERC20ToUSDCRate);
+        uint256 _TokenAmount = (msg.value * 10**4) / rate;
 
         require(_TokenAmount >= minimumPurchaseAmount, "Minimum purchase amount is greater than input amount");
-        emit Convertation(_TokenAmount, _USDCAmount);
         
         IERC20 TOKEN = IERC20(ERC20Address);
 
@@ -200,6 +204,36 @@ contract VendingMachine is ReentrancyGuard {
 
         payable(msg.sender).transfer(_MATICAmount);
         emit Transfer(address(this), msg.sender, _MATICAmount);
+
+        return _MATICAmount;
+    }
+
+    function withdrawOwnerStable(uint256 _withdrawAmount, address stableAddress, address withdrawAddress) public onlyOwner payable returns (uint256 withdrawnAmount) {
+        IERC20 STABLE = IERC20(stableAddress);
+
+        require(STABLE.balanceOf(address(this)) >= _withdrawAmount, "Insufficient funds in the Vending contract");
+       
+        STABLE.safeTransfer(withdrawAddress, _withdrawAmount );
+        emit Transfer(address(this), withdrawAddress, _withdrawAmount);
+
+        return _withdrawAmount;
+    }
+
+    function withdrawOwnerUSDC(uint256 _withdrawAmount, address withdrawAddress) public onlyOwner payable returns (uint256 withdrawnAmount) {
+        return withdrawOwnerStable(_withdrawAmount, USDCAddress, withdrawAddress);
+    }
+
+    function withdrawOwnerUSDT(uint256 _withdrawAmount, address withdrawAddress) public onlyOwner payable returns (uint256 withdrawnAmount) {
+        return withdrawOwnerStable(_withdrawAmount, USDCAddress, withdrawAddress);
+    }
+
+    
+    function withdrawOwnerMatic(uint256 _MATICAmount, address withdrawAddress) public payable onlyOwner returns (uint256 withdrawnAmount) {
+        
+        require(getVendingMATICBalance() >= _MATICAmount, "Insufficient funds in MATIC");
+
+        payable(withdrawAddress).transfer(_MATICAmount);
+        emit Transfer(address(this), withdrawAddress, _MATICAmount);
 
         return _MATICAmount;
     }

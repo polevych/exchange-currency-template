@@ -1,21 +1,22 @@
+require("dotenv").config();
 import hre from "hardhat";
 
 async function main() {
-  const VendingMachine = await hre.ethers.getContractFactory("VendingMachine");
-  const contract = await VendingMachine.deploy(
+  const contract = await hre.ethers.getContractFactory("VendingMachine");
+  const vendingMachine = await contract.deploy(
     process.env.USDC_ADDRESS,
     process.env.USDT_ADDRESS,
-    process.env.ERC20_ADDRESS,
-    process.env.ERC20_TO_USDC_RATE,
+    process.env.TOKEN_ADDRESS,
+    process.env.TOKEN_TO_USDC_RATE,
     process.env.MINIMUM_PURCHASE_AMOUNT,
-    process.env.USDC_USD_PRICE_FEED,
-    process.env.USDT_USD_PRICE_FEED,
-    process.env.MATIC_USD_PRICE_FEED
+    process.env.PRICE_FEED_USDC,
+    process.env.PRICE_FEED_USDT,
+    process.env.PRICE_FEED_MATIC
   );
 
-  await contract.deployed();
-
-  console.log(`VendingMachine  deployed to ${contract.address}`);
+  console.log(
+    `Vending Machine contract deployed to: ${vendingMachine.address}`
+  );
 }
 
 main().catch((error) => {
