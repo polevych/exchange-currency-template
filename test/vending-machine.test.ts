@@ -300,4 +300,56 @@ describe("VendingMachine", function () {
       );
     });
   });
+
+  describe("owner withdraw core", function () {
+    it("should fail if there are mot enough stable", async function () {
+      await expect(
+        vendingMachine
+          .connect(owner)
+          .withdrawOwnerStable(
+            ethers.utils.parseEther("58000"),
+            USDC.address,
+            await owner.getAddress()
+          )
+      ).to.be.revertedWith("Insufficient funds in the Vending contract");
+    });
+  });
+
+  describe("owner withdraw USDC", function () {
+    it("owner should be able to withdraw USDC", async function () {
+      const ownerUSDCBalanceBefore = await USDC.balanceOf(
+        await owner.getAddress()
+      );
+
+      const tokenAmount = 10;
+      await vendingMachine.connect(user2).purchaseForUSDC(tokenAmount);
+
+      await vendingMachine
+        .connect(owner)
+        .withdrawOwnerUSDC(tokenAmount, await owner.getAddress());
+
+      expect(await USDC.balanceOf(await owner.getAddress())).to.be.equal(
+        ownerUSDCBalanceBefore.add(tokenAmount)
+      );
+    });
+  });
+
+  describe("owner withdraw USDT", function () {
+    it("owner should be able to withdraw USDT", async function () {
+      const ownerUSDTBalanceBefore = await USDT.balanceOf(
+        await owner.getAddress()
+      );
+
+      const tokenAmount = 10;
+      await vendingMachine.connect(user2).purchaseForUSDT(tokenAmount);
+
+      await vendingMachine
+        .connect(owner)
+        .withdrawOwnerUSDT(tokenAmount, await owner.getAddress());
+
+      expect(await USDC.balanceOf(await owner.getAddress())).to.be.equal(
+        ownerUSDTBalanceBefore.add(tokenAmount)
+      );
+    });
+  });
 });
