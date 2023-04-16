@@ -28,8 +28,8 @@ contract VendingMachine is ReentrancyGuard {
    
     constructor(address _USDCAddress, 
                 address _USDTAddress,
-                address _tokenAddress, 
-                uint256 _TokenToUSDCRate, 
+                address _ERC20Address, 
+                uint256 _ERC20ToUSDCRate, 
                 uint256 _minimumPurchaseAmount, 
                 address _priceFeedUSDC, 
                 address _priceFeedUSDT,
@@ -38,8 +38,8 @@ contract VendingMachine is ReentrancyGuard {
         
         USDCAddress = _USDCAddress;
         USDTAddress = _USDTAddress;
-        ERC20ToUSDCRate = _TokenToUSDCRate;
-        ERC20Address = _tokenAddress;
+        ERC20ToUSDCRate = _ERC20ToUSDCRate;
+        ERC20Address = _ERC20Address;
         minimumPurchaseAmount = _minimumPurchaseAmount;
 
         priceFeedUSDC = AggregatorV3Interface(_priceFeedUSDC);
