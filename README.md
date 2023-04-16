@@ -46,20 +46,25 @@ This contract uses the following dependencies from OpenZeppelin and Chainlink:
 - **purchaseForUSDC(uint256 \_TokenAmount):** allows the user to purchase ERC-20 token in exchange for USDC using purchaseForStable with USDC address.
 - **purchaseForUSDT(uint256 \_TokenAmount):** allows the user to purchase ERC-20 token in exchange for USDT using purchaseForStable with USDT address.
 - **purchaseForMATIC():** allows the user to purchase ERC-20 token in exchange for MATIC.
-- **withdrawStable(uint256 \_TokenAmount, address \_stableAddress):** allows the user to withdraw ERC-20 tokens in exchange for stable coin(USDT/USDC).
-- **withdrawUSDC(uint256 \_TokenAmount):** allows the user to withdraw ERC-20 tokens in exchange for USDC using withdrawStable with USDC address.
-- **withdrawUSDT(uint256 \_TokenAmount):** allows the user to withdraw ERC-20 tokens in exchange for USDT using withdrawStable with USDT address.
+- **withdrawStable(uint256 \_TokenAmount, address \_stableAddress):** allows the user to withdraw stable coin(USDT/USDC) tokens in exchange for ERC-20.
+- **withdrawUSDC(uint256 \_TokenAmount):** allows the user to withdraw USDC tokens in exchange for ERC-20 using withdrawStable with USDC address.
+- **withdrawUSDT(uint256 \_TokenAmount):** allows the user to withdraw USDT tokens in exchange for ERC-20 using withdrawStable with USDT address.
+- **withdrawMATIC(uint256 \_TokenAmount):** allows the user to withdraw MATIC tokens in exchange for ERC-20.
+- **withdrawOwnerStable(uint256 \_TokenAmount, address \_stableAddress, address \_withdrawAddress):** allows the owner to withdraw stable coin(USDT/USDC) tokens from Vending Machine Balance.
+- **withdrawOwnerUSDC(uint256 \_TokenAmount):** allows the owner to withdraw USDC tokens from Vending Machine Balance using withdrawOwnerStable with USDC address.
+- **withdrawOwnerUSDT(uint256 \_TokenAmount):** allows the owner to withdraw USDT tokens from Vending Machine Balance using withdrawOwnerStable with USDT address.
+- **withdrawOwnerMATIC(uint256 \_TokenAmount):** allows the owner to withdraw MATIC tokens from Vending Machine Balance.
 
 ## Usage
 
 **Install the dependencies:**
 
 ```typescript
-yarn
+yarn;
 ```
 
 To use this contract, you need to deploy it on the Polygon Network. You can also use it as a template to create similar contracts on other networks (you need to work with decimals).
-You can find sample deploy script `scripts/deploy-vending.ts` and .env.example. The contract constructor takes the following parameters:
+You can find sample deploy scripts `scripts/deploy-vending.ts`, `scripts/deploy-token.ts` and .env.example. Please fill Alchemy url and private keys first if you want to deploy the contracts. The contract constructor takes the following parameters:
 
 - **\_USDCAddress:** the address of the USDC token.
 - **\_USDTAddress:** the address of the USDT token.

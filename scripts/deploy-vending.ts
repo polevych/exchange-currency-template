@@ -6,8 +6,8 @@ async function main() {
   const vendingMachine = await contract.deploy(
     process.env.USDC_ADDRESS,
     process.env.USDT_ADDRESS,
-    process.env.TOKEN_ADDRESS,
-    process.env.TOKEN_TO_USDC_RATE,
+    process.env.ERC20_ADDRESS,
+    process.env.ERC20_TO_USDC_RATE,
     process.env.MINIMUM_PURCHASE_AMOUNT,
     process.env.PRICE_FEED_USDC,
     process.env.PRICE_FEED_USDT,
